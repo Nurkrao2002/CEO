@@ -19,6 +19,7 @@ import {
   CreditCard,
   TrendingUp,
   Activity,
+  Landmark,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -59,6 +60,7 @@ const navItems = {
   "DATA & REPORTS": [
       { href: "/data-entry", icon: ClipboardPlus, label: "Data Entry", roles: ["Company Admin", "Finance Team", "Sales & Marketing", "Operations Team"] },
       { href: "/reports", icon: FileBarChart2, label: "Reports", roles: ["Company Admin", "CEO", "Finance Team", "Sales & Marketing"] },
+      { href: "/finance", icon: Landmark, label: "Finance", roles: ["Company Admin", "CEO", "Finance Team"] },
   ],
   ADMINISTRATION: [
       { href: "/roles", icon: Shield, label: "Role Management", roles: ["Company Admin"] },
