@@ -38,8 +38,7 @@ export default function LoginPage() {
         redirectUrl = `/${user.company.slug}/financial-dashboard`;
       }
 
-      window.location.href = redirectUrl;
-
+      router.push(redirectUrl);
     } else {
       toast({
         variant: "destructive",
@@ -74,11 +73,7 @@ export default function LoginPage() {
                                     <Input id="password" name="password" type={showPassword ? "text" : "password"} autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} />
                                     <button
                                         type="button"
-                                        onMouseDown={() => setShowPassword(true)}
-                                        onMouseUp={() => setShowPassword(false)}
-                                        onMouseLeave={() => setShowPassword(false)}
-                                        onTouchStart={() => setShowPassword(true)}
-                                        onTouchEnd={() => setShowPassword(false)}
+                                        onClick={() => setShowPassword(!showPassword)}
                                         className="absolute inset-y-0 right-0 flex items-center justify-center px-3 text-gray-400 hover:text-gray-500"
                                         aria-label={showPassword ? "Hide password" : "Show password"}
                                     >
