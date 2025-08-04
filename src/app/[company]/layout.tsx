@@ -185,10 +185,13 @@ export default function DashboardLayout({
   const { user } = useAuth();
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const isMobile = useIsMobile();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-        router.push("/login");
+    if (user) {
+      setIsLoading(false);
+    } else {
+      router.push("/login");
     }
   }, [user, router]);
 

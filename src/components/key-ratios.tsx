@@ -6,6 +6,19 @@ type KeyRatiosProps = {
 };
 
 export function KeyRatios({ data }: KeyRatiosProps) {
+  if (!data) {
+    return (
+      <Card className="h-full">
+        <CardHeader className="pb-2">
+          <CardTitle className="font-headline text-base">Key Ratios</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p>No data available.</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const roe = data.shareholdersEquity > 0 ? (data.netIncome / data.shareholdersEquity) * 100 : 0;
   const dividendPayoutRatio = data.netIncome > 0 ? data.dividendsPaid / data.netIncome : 0;
   const sgr = roe * (1 - dividendPayoutRatio);

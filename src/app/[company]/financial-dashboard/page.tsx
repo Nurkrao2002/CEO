@@ -119,7 +119,7 @@ function FinanceDashboardContent() {
                 <WeeklyCashFlow data={chartData} />
             </div>
             <div className="grid grid-cols-1 gap-6 lg:col-span-1">
-                {(user.role === 'Company Admin' || user.role === 'CEO') && <KeyRatios />}
+                {(user.role === 'Company Admin' || user.role === 'CEO') && <KeyRatios data={stats} />}
                 <AccountsTable type="Receivable" />
                 <AccountsTable type="Payable" />
             </div>
