@@ -38,7 +38,7 @@ export default function LoginPage() {
         redirectUrl = `/${user.company.slug}/financial-dashboard`;
       }
 
-      router.push(redirectUrl);
+      window.location.href = redirectUrl;
     } else {
       toast({
         variant: "destructive",
