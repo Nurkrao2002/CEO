@@ -15,36 +15,27 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import { Textarea } from "./ui/textarea"
 
 const formSchema = z.object({
-  // Membership Changes
-  membershipChangeDate: z.date(),
-  newMembers: z.number(),
-  lostMembers: z.number(),
-  reasonForLoss: z.string(),
+  // Market Data
+  marketDataDate: z.date(),
+  totalMarketSize: z.number(),
+  companyRevenueShare: z.number(),
+  competitorName: z.string(),
 
-  // Customer Feedback
-  surveyDate: z.date(),
-  customerId: z.string(),
-  csatScore: z.number(),
-  npsScore: z.number(),
-  comments: z.string().optional(),
+  // Pricing Trends
+  pricingTrendsDate: z.date(),
+  serviceProduct: z.string(),
+  industryAveragePrice: z.number(),
+  competitorPrice: z.number(),
 })
 
-export function MembershipDataEntryForm() {
+export function IndustryInsightsDataEntryForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -56,10 +47,10 @@ export function MembershipDataEntryForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <h2 className="text-xl font-bold">Membership Changes</h2>
+        <h2 className="text-xl font-bold">Market Data</h2>
         <FormField
           control={form.control}
-          name="membershipChangeDate"
+          name="marketDataDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Date</FormLabel>
@@ -100,10 +91,10 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="newMembers"
+          name="totalMarketSize"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Members</FormLabel>
+              <FormLabel>Total Market Size</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -113,10 +104,10 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="lostMembers"
+          name="companyRevenueShare"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Lost Members</FormLabel>
+              <FormLabel>Company Revenue Share</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -126,35 +117,25 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="reasonForLoss"
+          name="competitorName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Reason for Loss</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a reason" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="price">Price</SelectItem>
-                  <SelectItem value="service">Service</SelectItem>
-                  <SelectItem value="competition">Competition</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormLabel>Competitor Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <h2 className="text-xl font-bold">Customer Feedback</h2>
+        <h2 className="text-xl font-bold">Pricing Trends</h2>
         <FormField
           control={form.control}
-          name="surveyDate"
+          name="pricingTrendsDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Survey Date</FormLabel>
+              <FormLabel>Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -192,10 +173,10 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="customerId"
+          name="serviceProduct"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Customer ID</FormLabel>
+              <FormLabel>Service/Product</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -205,10 +186,10 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="csatScore"
+          name="industryAveragePrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>CSAT Score (1-5)</FormLabel>
+              <FormLabel>Industry Average Price</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -218,25 +199,12 @@ export function MembershipDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="npsScore"
+          name="competitorPrice"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>NPS Score (0-10)</FormLabel>
+              <FormLabel>Competitor Price</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="comments"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Comments</FormLabel>
-              <FormControl>
-                <Textarea {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

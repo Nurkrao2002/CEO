@@ -11,9 +11,13 @@ import { WeeklyCashFlow } from "@/components/weekly-cash-flow";
 import { KeyRatios } from "@/components/key-ratios";
 import { AccountsTable } from "@/components/accounts-table";
 import { FinanceDataEntryForm } from "@/components/finance-data-entry-form";
+import { useFinancialData } from "@/context/financial-data-context";
+import { getStatsForPeriod } from "@/lib/financial-aggregator";
 
 export default function FinancePage() {
   const [showDataEntry, setShowDataEntry] = useState(false);
+  const { data } = useFinancialData();
+  const stats = getStatsForPeriod(data, "YTD");
 
   return (
     <>
@@ -37,7 +41,7 @@ export default function FinancePage() {
           <FinanceDataEntryForm />
         ) : (
           <>
-            <FinancialStats />
+            <FinancialStats stats={stats} />
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
               <div className="lg:col-span-3">
                 <RevenueProfitTrend />
@@ -51,7 +55,7 @@ export default function FinancePage() {
                 <WeeklyCashFlow />
               </div>
               <div className="lg:col-span-2">
-                <KeyRatios />
+                <KeyRatios data={stats} />
               </div>
             </div>
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

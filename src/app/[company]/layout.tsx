@@ -20,6 +20,7 @@ import {
   TrendingUp,
   Activity,
   Landmark,
+  Lightbulb,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -61,6 +62,7 @@ const navItems = {
       { href: "/data-entry", icon: ClipboardPlus, label: "Data Entry", roles: ["Company Admin", "Finance Team", "Sales & Marketing", "Operations Team"] },
       { href: "/reports", icon: FileBarChart2, label: "Reports", roles: ["Company Admin", "CEO", "Finance Team", "Sales & Marketing"] },
       { href: "/finance", icon: Landmark, label: "Finance", roles: ["Company Admin", "CEO", "Finance Team"] },
+      { href: "/industry-insights", icon: Lightbulb, label: "Industry Insights", roles: ["Company Admin", "CEO"] },
   ],
   ADMINISTRATION: [
       { href: "/roles", icon: Shield, label: "Role Management", roles: ["Company Admin"] },

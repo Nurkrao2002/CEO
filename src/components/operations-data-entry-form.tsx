@@ -30,38 +30,35 @@ import { cn } from "@/lib/utils"
 import { Checkbox } from "./ui/checkbox"
 
 const formSchema = z.object({
-  // Lead Generation
-  leadGenDate: z.date(),
-  leadSource: z.string(),
-  leadCount: z.number(),
-  campaignName: z.string(),
+  // Project Tracking
+  projectId: z.string(),
+  startDate: z.date(),
+  plannedEndDate: z.date(),
+  actualEndDate: z.date().optional(),
+  status: z.string(),
+  projectValue: z.number(),
 
-  // Lead Conversion
-  leadId: z.string(),
-  conversionDate: z.date(),
-  convertedToCustomer: z.boolean(),
-  customerId: z.string().optional(),
+  // Time Tracking
+  employeeId: z.string(),
+  timeTrackingDate: z.date(),
+  billableHours: z.number(),
+  nonBillableHours: z.number(),
+  timeTrackingProjectId: z.string().optional(),
 
-  // Sales Pipeline
-  opportunityId: z.string(),
-  dealStage: z.string(),
-  dealValue: z.number(),
-  probability: z.number(),
-  expectedCloseDate: z.date(),
+  // Service Delivery
+  serviceId: z.string(),
+  customerId: z.string(),
+  startTime: z.string(), // Should be timestamp
+  endTime: z.string(), // Should be timestamp
+  deliveredOnTime: z.boolean(),
 
-  // Campaign Costs
-  campaignCostName: z.string(),
-  campaignCostDate: z.date(),
-  costType: z.string(),
-  campaignCostAmount: z.number(),
-
-  // Revenue Attribution
-  revenueAttributionCustomerId: z.string(),
-  revenueSource: z.string(),
-  attributedRevenue: z.number(),
+  // Headcount
+  headcountDate: z.date(),
+  department: z.string(),
+  employeeCount: z.number(),
 })
 
-export function SalesMarketingDataEntryForm() {
+export function OperationsDataEntryForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -73,10 +70,197 @@ export function SalesMarketingDataEntryForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <h2 className="text-xl font-bold">Lead Generation</h2>
+        <h2 className="text-xl font-bold">Project Tracking</h2>
         <FormField
           control={form.control}
-          name="leadGenDate"
+          name="projectId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project ID</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="startDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Start Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="plannedEndDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Planned End Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="actualEndDate"
+          render={({ field }) => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Actual End Date</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="not-started">Not Started</SelectItem>
+                  <SelectItem value="in-progress">In Progress</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="delayed">Delayed</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="projectValue"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project Value</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <h2 className="text-xl font-bold">Time Tracking</h2>
+        <FormField
+          control={form.control}
+          name="employeeId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Employee ID</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="timeTrackingDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Date</FormLabel>
@@ -117,34 +301,10 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="leadSource"
+          name="billableHours"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Lead Source</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a lead source" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="website">Website</SelectItem>
-                  <SelectItem value="social-media">Social Media</SelectItem>
-                  <SelectItem value="referral">Referral</SelectItem>
-                  <SelectItem value="event">Event</SelectItem>
-                  <SelectItem value="paid-ads">Paid Ads</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="leadCount"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Lead Count</FormLabel>
+              <FormLabel>Billable Hours</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -154,10 +314,23 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="campaignName"
+          name="nonBillableHours"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Campaign Name</FormLabel>
+              <FormLabel>Non-Billable Hours</FormLabel>
+              <FormControl>
+                <Input type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="timeTrackingProjectId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Project ID (Optional)</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -166,77 +339,17 @@ export function SalesMarketingDataEntryForm() {
           )}
         />
 
-        <h2 className="text-xl font-bold">Lead Conversion</h2>
+        <h2 className="text-xl font-bold">Service Delivery</h2>
         <FormField
           control={form.control}
-          name="leadId"
+          name="serviceId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Lead ID</FormLabel>
+              <FormLabel>Service ID</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
               <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="conversionDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Conversion Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="convertedToCustomer"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              <div className="space-y-1 leading-none">
-                <FormLabel>
-                  Converted to Customer
-                </FormLabel>
-              </div>
             </FormItem>
           )}
         />
@@ -253,16 +366,14 @@ export function SalesMarketingDataEntryForm() {
             </FormItem>
           )}
         />
-
-        <h2 className="text-xl font-bold">Sales Pipeline</h2>
         <FormField
           control={form.control}
-          name="opportunityId"
+          name="startTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Opportunity ID</FormLabel>
+              <FormLabel>Start Time</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -270,37 +381,12 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="dealStage"
+          name="endTime"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Deal Stage</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a deal stage" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="lead">Lead</SelectItem>
-                  <SelectItem value="qualified">Qualified</SelectItem>
-                  <SelectItem value="proposal">Proposal</SelectItem>
-                  <SelectItem value="negotiation">Negotiation</SelectItem>
-                  <SelectItem value="closed-won">Closed Won</SelectItem>
-                  <SelectItem value="closed-lost">Closed Lost</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dealValue"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Deal Value</FormLabel>
+              <FormLabel>End Time</FormLabel>
               <FormControl>
-                <Input type="number" {...field} />
+                <Input type="datetime-local" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -308,76 +394,28 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="probability"
+          name="deliveredOnTime"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Probability (%)</FormLabel>
+            <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
               <FormControl>
-                <Input type="number" {...field} />
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="expectedCloseDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Expected Close Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date > new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
+              <div className="space-y-1 leading-none">
+                <FormLabel>
+                  Delivered On Time
+                </FormLabel>
+              </div>
             </FormItem>
           )}
         />
 
-        <h2 className="text-xl font-bold">Campaign Costs</h2>
+        <h2 className="text-xl font-bold">Headcount</h2>
         <FormField
           control={form.control}
-          name="campaignCostName"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Campaign Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="campaignCostDate"
+          name="headcountDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Date</FormLabel>
@@ -418,20 +456,21 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="costType"
+          name="department"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cost Type</FormLabel>
+              <FormLabel>Department</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a cost type" />
+                    <SelectValue placeholder="Select a department" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="ad-spend">Ad Spend</SelectItem>
-                  <SelectItem value="content-creation">Content Creation</SelectItem>
-                  <SelectItem value="events">Events</SelectItem>
+                  <SelectItem value="finance">Finance</SelectItem>
+                  <SelectItem value="sales">Sales</SelectItem>
+                  <SelectItem value="operations">Operations</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -440,10 +479,10 @@ export function SalesMarketingDataEntryForm() {
         />
         <FormField
           control={form.control}
-          name="campaignCostAmount"
+          name="employeeCount"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Amount</FormLabel>
+              <FormLabel>Employee Count</FormLabel>
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
@@ -451,57 +490,6 @@ export function SalesMarketingDataEntryForm() {
             </FormItem>
           )}
         />
-
-        <h2 className="text-xl font-bold">Revenue Attribution</h2>
-        <FormField
-          control={form.control}
-          name="revenueAttributionCustomerId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Customer ID</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="revenueSource"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Revenue Source</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a revenue source" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="campaign">Campaign</SelectItem>
-                  <SelectItem value="organic">Organic</SelectItem>
-                  <SelectItem value="referral">Referral</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="attributedRevenue"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Attributed Revenue</FormLabel>
-              <FormControl>
-                <Input type="number" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
 
         <Button type="submit">Submit</Button>
       </form>

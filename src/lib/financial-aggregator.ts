@@ -50,6 +50,8 @@ const aggregateRecords = (records: FinancialRecord[]): Omit<FinancialRecord, 'pe
         return {
             revenue: 0, grossProfit: 0, netIncome: 0, expenses: 0,
             ebitda: 0, cashFlow: 0, customerLtv: 0, customerCac: 0, count: 0,
+            cogs: 0, operatingExpenses: 0, interest: 0, taxes: 0, depreciation: 0,
+            shareholdersEquity: 0, dividendsPaid: 0,
         };
     }
     
@@ -62,17 +64,33 @@ const aggregateRecords = (records: FinancialRecord[]): Omit<FinancialRecord, 'pe
         cashFlow: acc.cashFlow + rec.cashFlow,
         customerLtv: acc.customerLtv + rec.customerLtv,
         customerCac: acc.customerCac + rec.customerCac,
-    }), { revenue: 0, grossProfit: 0, netIncome: 0, expenses: 0, ebitda: 0, cashFlow: 0, customerLtv: 0, customerCac: 0 });
+        cogs: acc.cogs + rec.cogs,
+        operatingExpenses: acc.operatingExpenses + rec.operatingExpenses,
+        interest: acc.interest + rec.interest,
+        taxes: acc.taxes + rec.taxes,
+        depreciation: acc.depreciation + rec.depreciation,
+        shareholdersEquity: acc.shareholdersEquity + rec.shareholdersEquity,
+        dividendsPaid: acc.dividendsPaid + rec.dividendsPaid,
+    }), { revenue: 0, grossProfit: 0, netIncome: 0, expenses: 0, ebitda: 0, cashFlow: 0, customerLtv: 0, customerCac: 0, cogs: 0, operatingExpenses: 0, interest: 0, taxes: 0, depreciation: 0, shareholdersEquity: 0, dividendsPaid: 0 });
+
+    const netProfit = total.revenue - (total.cogs + total.operatingExpenses + total.interest + total.taxes + total.depreciation);
 
     return {
         revenue: total.revenue,
-        grossProfit: total.grossProfit,
-        netIncome: total.netIncome,
+        grossProfit: total.revenue - total.cogs,
+        netIncome: netProfit,
         expenses: total.expenses,
-        ebitda: total.ebitda,
+        ebitda: netProfit + total.interest + total.taxes + total.depreciation,
         cashFlow: total.cashFlow,
         customerLtv: records.length > 0 ? total.customerLtv / records.length : 0,
         customerCac: records.length > 0 ? total.customerCac / records.length : 0,
+        cogs: total.cogs,
+        operatingExpenses: total.operatingExpenses,
+        interest: total.interest,
+        taxes: total.taxes,
+        depreciation: total.depreciation,
+        shareholdersEquity: total.shareholdersEquity,
+        dividendsPaid: total.dividendsPaid,
         count: records.length,
     }
 };
@@ -138,8 +156,8 @@ export const getStatsForPeriod = (allData: FinancialRecord[], period: Period, da
         return (current - previous) / Math.abs(previous);
     }
     
-    const currentGrossMargin = currentAgg.revenue > 0 ? currentAgg.grossProfit / currentAgg.revenue : 0;
-    const previousGrossMargin = previousAgg.revenue > 0 ? previousAgg.grossProfit / previousAgg.revenue : 0;
+    const currentGrossMargin = currentAgg.revenue > 0 ? (currentAgg.revenue - currentAgg.cogs) / currentAgg.revenue : 0;
+    const previousGrossMargin = previousAgg.revenue > 0 ? (previousAgg.revenue - previousAgg.cogs) / previousAgg.revenue : 0;
 
     const currentNetMargin = currentAgg.revenue > 0 ? currentAgg.netIncome / currentAgg.revenue : 0;
     const previousNetMargin = previousAgg.revenue > 0 ? previousAgg.netIncome / previousAgg.revenue : 0;

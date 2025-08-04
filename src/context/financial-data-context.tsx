@@ -14,6 +14,13 @@ export interface FinancialRecord {
   ebitda: number;
   customerLtv: number;
   customerCac: number;
+  cogs: number;
+  operatingExpenses: number;
+  interest: number;
+  taxes: number;
+  depreciation: number;
+  shareholdersEquity: number;
+  dividendsPaid: number;
 }
 
 interface FinancialDataContextType {
@@ -44,6 +51,13 @@ const generateRecentData = () => {
             cashFlow: Math.round(netIncome * 1.1),
             customerLtv: 45300 + Math.random() * 500,
             customerCac: 2870 + Math.random() * 100,
+            cogs: 0,
+            operatingExpenses: 0,
+            interest: 0,
+            taxes: 0,
+            depreciation: 0,
+            shareholdersEquity: 0,
+            dividendsPaid: 0,
         });
     }
 
@@ -64,6 +78,13 @@ const generateRecentData = () => {
             cashFlow: Math.round(netIncome * 1.1),
             customerLtv: 45300 + Math.random() * 500,
             customerCac: 2870 + Math.random() * 100,
+            cogs: 0,
+            operatingExpenses: 0,
+            interest: 0,
+            taxes: 0,
+            depreciation: 0,
+            shareholdersEquity: 0,
+            dividendsPaid: 0,
         });
     }
     return data;
@@ -86,6 +107,13 @@ const generateYearData = (year: number, baseRevenue: number, growthFactor: numbe
             cashFlow: Math.round(netIncome * 1.15),
             customerLtv: 42000 + (year-2022) * 500,
             customerCac: 3000 - (year-2022) * 50,
+            cogs: 0,
+            operatingExpenses: 0,
+            interest: 0,
+            taxes: 0,
+            depreciation: 0,
+            shareholdersEquity: 0,
+            dividendsPaid: 0,
         });
     }
     return data;
