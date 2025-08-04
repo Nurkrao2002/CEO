@@ -4,6 +4,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 import { cn } from '@/lib/utils';
+import { ThemeProvider } from 'next-themes';
 
 const fontBody = Inter({ 
   subsets: ['latin'],
@@ -34,10 +35,12 @@ export default function RootLayout({
           fontHeadline.variable
         )}
       >
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

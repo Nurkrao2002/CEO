@@ -1,60 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import { DashboardHeader } from "@/components/dashboard-header";
-import { StatCard } from "@/components/stat-card";
-import { mockUsers } from "@/lib/mock-users";
-import { useMemo } from "react";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { PlatformHealth } from "@/components/platform-health";
+import { TenantAnalytics } from "@/components/tenant-analytics";
+import { BillingUsage } from "@/components/billing-usage";
+import { SystemAlerts } from "@/components/system-alerts";
+import { TenantManagementTable } from "@/components/tenant-management-table";
+import { PlatformSettingsPanel } from "@/components/platform-settings-panel";
+import { QuickActions } from "@/components/quick-actions";
+import { WidgetLibrary } from "@/components/widget-library";
 
 export default function PlatformAdminDashboardPage() {
-  const platformMetrics = useMemo(() => {
-    const companies = new Set(mockUsers.filter(u => u.company.id !== 'platform').map(u => u.company.id));
-    const totalUsers = mockUsers.filter(u => u.company.id !== 'platform').length;
-    const subscriptions = {
-        free: 0,
-        paid: 0,
-    };
-    companies.forEach(c => {
-        // In a real app, this would come from the company document
-        subscriptions.free += 1;
-    });
+  const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
+  const [widgets, setWidgets] = useState([
+    "Platform Health",
+    "Tenant Analytics",
+    "Billing & Usage",
+    "System Alerts",
+    "Tenant Management Table",
+    "Platform Settings Panel",
+    "Quick Actions",
+  ]);
 
-    return {
-        totalCompanies: companies.size,
-        totalUsers,
-        subscriptions,
-    }
-  }, []);
-
-  const subscriptionChartData = [
-      { name: 'Free', value: platformMetrics.subscriptions.free },
-      { name: 'Paid', value: platformMetrics.subscriptions.paid },
-  ]
+  const handleAddWidget = (widget: string) => {
+    setWidgets([...widgets, widget]);
+  };
 
   return (
     <>
       <DashboardHeader
         title="Platform Dashboard"
         description="An overview of the entire platform."
+        onCustomizeClick={() => setShowWidgetLibrary(!showWidgetLibrary)}
+        isDataLive={true}
+        onAutoRefreshChange={(value) => console.log(value)}
+        onExportClick={() => console.log("Exporting PDF...")}
       />
       <main className="flex-1 space-y-6 p-4 sm:px-6 lg:px-8">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            <StatCard title="Total Companies" value={platformMetrics.totalCompanies} />
-            <StatCard title="Total Users" value={platformMetrics.totalUsers} />
-            <StatCard title="Active Subscriptions" value={platformMetrics.subscriptions.free + platformMetrics.subscriptions.paid} />
-        </div>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <div className="col-span-4">
-                <h3 className="text-lg font-semibold mb-4">Subscription Plan Distribution</h3>
-                <ResponsiveContainer width="100%" height={350}>
-                    <BarChart data={subscriptionChartData}>
-                        <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                        <Bar dataKey="value" fill="var(--color-chart-1)" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                </ResponsiveContainer>
+        {showWidgetLibrary ? (
+          <WidgetLibrary onAddWidget={handleAddWidget} />
+        ) : (
+          <>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {widgets.includes("Platform Health") && <PlatformHealth />}
+              {widgets.includes("Tenant Analytics") && <TenantAnalytics />}
+              {widgets.includes("Billing & Usage") && <BillingUsage />}
             </div>
-        </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {widgets.includes("System Alerts") && <SystemAlerts />}
+              {widgets.includes("Platform Settings Panel") && <PlatformSettingsPanel />}
+              {widgets.includes("Quick Actions") && <QuickActions />}
+            </div>
+            {widgets.includes("Tenant Management Table") && <TenantManagementTable />}
+          </>
+        )}
       </main>
     </>
   );

@@ -4,22 +4,35 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/auth-context";
 import { DashboardHeader } from "@/components/dashboard-header";
-import { OperationalMetrics } from "@/components/operational-metrics";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, RadialBarChart, RadialBar, Legend } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { OperationsDataEntryForm } from "@/components/operations-data-entry-form";
-import { OperationsDataProvider, useOperationsData } from "@/context/operations-data-context";
-import { useFinancialData } from "@/context/financial-data-context";
-import { getOperationsStats } from "@/lib/operations-aggregator";
+import { OperationsDataProvider } from "@/context/operations-data-context";
+import { ProjectHealth } from "@/components/project-health";
+import { ServiceDelivery } from "@/components/service-delivery";
+import { ResourceEfficiency } from "@/components/resource-efficiency";
+import { ProjectTracker } from "@/components/project-tracker";
+import { CapacityPlanner } from "@/components/capacity-planner";
+import { OperationsQuickActions } from "@/components/operations-quick-actions";
+import { WidgetLibrary } from "@/components/widget-library";
 
 function OperationsDashboard() {
   const { user } = useAuth();
   const router = useRouter();
   const [showDataEntry, setShowDataEntry] = useState(false);
-  const { data: operationsData } = useOperationsData();
-  const { data: financialData } = useFinancialData();
-  const stats = getOperationsStats(operationsData, financialData);
+  const [showWidgetLibrary, setShowWidgetLibrary] = useState(false);
+  const [widgets, setWidgets] = useState([
+    "Project Health",
+    "Service Delivery",
+    "Resource Efficiency",
+    "Project Tracker",
+    "Capacity Planner",
+    "Operations Quick Actions",
+  ]);
+
+  const handleAddWidget = (widget: string) => {
+    setWidgets([...widgets, widget]);
+  };
 
   useEffect(() => {
     if (user && !['Company Admin', 'CEO', 'Operations Team'].includes(user.role)) {
@@ -35,64 +48,36 @@ function OperationsDashboard() {
     );
   }
 
-  const radialChartData = [
-      { name: 'Utilization', value: stats.utilizationRate, fill: 'var(--color-chart-1)' },
-  ];
-
-  const barChartData = [
-        { name: 'Jan', value: 95 },
-        { name: 'Feb', value: 96 },
-        { name: 'Mar', value: 97 },
-        { name: 'Apr', value: 98 },
-        { name: 'May', value: 99 },
-        { name: 'Jun', value: 100 },
-  ]
-
   return (
     <>
-      <DashboardHeader title="Operations Dashboard">
+      <DashboardHeader
+        title="Operations Dashboard"
+        onCustomizeClick={() => setShowWidgetLibrary(!showWidgetLibrary)}
+        isDataLive={true}
+        onAutoRefreshChange={(value) => console.log(value)}
+        onExportClick={() => console.log("Exporting PDF...")}
+      >
         <Button onClick={() => setShowDataEntry(!showDataEntry)}>
           <Plus className="mr-2 h-4 w-4" />
           {showDataEntry ? "Hide Form" : "Add Operations Data"}
         </Button>
       </DashboardHeader>
       <main className="flex-1 space-y-6 p-4 sm:px-6 lg:px-8">
-        {showDataEntry ? (
+        {showWidgetLibrary ? (
+          <WidgetLibrary onAddWidget={handleAddWidget} />
+        ) : showDataEntry ? (
           <OperationsDataEntryForm />
         ) : (
           <>
-            <OperationalMetrics data={stats} />
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <div className="col-span-3">
-                    <h3 className="text-lg font-semibold mb-4">Utilization Rate</h3>
-                    <ResponsiveContainer width="100%" height={350}>
-                        <RadialBarChart
-                            innerRadius="80%"
-                            outerRadius="100%"
-                            data={radialChartData}
-                            startAngle={180}
-                            endAngle={0}
-                        >
-                            <RadialBar
-                                minAngle={15}
-                                label={{ position: 'insideStart', fill: '#fff' }}
-                                background
-                                dataKey='value'
-                            />
-                            <Legend iconSize={10} width={120} height={140} layout='vertical' verticalAlign='middle' align="right" />
-                        </RadialBarChart>
-                    </ResponsiveContainer>
-                </div>
-                <div className="col-span-4">
-                    <h3 className="text-lg font-semibold mb-4">Project Completion Rate Trend</h3>
-                    <ResponsiveContainer width="100%" height={350}>
-                        <BarChart data={barChartData}>
-                            <XAxis dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                            <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                            <Bar dataKey="value" fill="var(--color-chart-2)" radius={[4, 4, 0, 0]} />
-                        </BarChart>
-                    </ResponsiveContainer>
-                </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {widgets.includes("Project Health") && <ProjectHealth />}
+              {widgets.includes("Service Delivery") && <ServiceDelivery />}
+              {widgets.includes("Resource Efficiency") && <ResourceEfficiency />}
+            </div>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {widgets.includes("Project Tracker") && <ProjectTracker />}
+              {widgets.includes("Capacity Planner") && <CapacityPlanner />}
+              {widgets.includes("Operations Quick Actions") && <OperationsQuickActions />}
             </div>
           </>
         )}
