@@ -39,15 +39,6 @@ const formSchema = z.object({
   actualEndDate: z.date().optional(),
   status: z.string(),
   projectValue: z.number(),
-}).refine(data => {
-  if (data.actualEndDate) {
-    return data.actualEndDate > data.startDate;
-  }
-  return true;
-}, {
-  message: "Actual end date must be after start date",
-  path: ["actualEndDate"],
-});
 
   // Time Tracking
   employeeId: z.string(),
@@ -67,7 +58,15 @@ const formSchema = z.object({
   headcountDate: z.date(),
   department: z.string(),
   employeeCount: z.number(),
-})
+}).refine(data => {
+  if (data.actualEndDate) {
+    return data.actualEndDate > data.startDate;
+  }
+  return true;
+}, {
+  message: "Actual end date must be after start date",
+  path: ["actualEndDate"],
+});
 
 export function OperationsDataEntryForm() {
   const { user } = useAuth()
