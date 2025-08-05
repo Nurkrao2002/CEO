@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/stat-card";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { DollarSign } from "lucide-react";
 
 const billableVsNonBillableData = [
   { name: 'Team A', billable: 800, nonBillable: 200 },
@@ -18,7 +19,7 @@ export function ResourceEfficiency() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2">
-          <StatCard title="Revenue per Employee" value="$123,456" />
+          <StatCard title="Revenue per Employee" value="$123,456" icon={DollarSign} />
           <div>
             <h3 className="text-lg font-semibold mb-2">Billable vs. Non-Billable Hours</h3>
             <ResponsiveContainer width="100%" height={200}>

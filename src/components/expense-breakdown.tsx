@@ -8,7 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { FinancialRecord } from '@/context/financial-data-context';
 
 const aggregateExpenses = (data: FinancialRecord[]) => {
-    if (data.length === 0) return [];
+    if (!data || data.length === 0) return [];
     
     const totalExpenses = data.reduce((sum, item) => sum + item.expenses, 0);
     if (totalExpenses === 0) return [];
