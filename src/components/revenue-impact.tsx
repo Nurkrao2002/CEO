@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatCard } from "@/components/stat-card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import { DollarSign } from "lucide-react";
 
 const avgRevenuePerClientData = [
   { name: 'Jan', value: 5000 },
@@ -21,7 +22,7 @@ export function RevenueImpact() {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4 md:grid-cols-2">
-          <StatCard title="Pipeline Value" value="$1,234,567" />
+          <StatCard title="Pipeline Value" value="$1,234,567" icon={DollarSign} />
           <div>
             <h3 className="text-lg font-semibold mb-2">Avg. Revenue per Client</h3>
             <ResponsiveContainer width="100%" height={200}>

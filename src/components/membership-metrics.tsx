@@ -16,7 +16,16 @@ export type MembershipMetricsData = {
 
 export function MembershipMetrics({ data }: { data: MembershipMetricsData }) {
     if (!data) {
-        return <div>No membership data available.</div>;
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-headline">Membership Metrics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p>No membership data available.</p>
+                </CardContent>
+            </Card>
+        );
     }
 
     return (
