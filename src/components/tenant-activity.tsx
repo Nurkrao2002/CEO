@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { StatCard } from "@/components/stat-card";
+import { Users } from "lucide-react";
 
 const newSignupsData = [
   { name: 'Mon', value: 5 },
@@ -32,7 +33,7 @@ export function TenantActivity() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-          <StatCard title="Active Users" value="1,234" />
+          <StatCard title="Active Users" value="1,234" icon={Users} />
         </div>
       </CardContent>
     </Card>
