@@ -19,7 +19,14 @@ function MembershipDashboard() {
   const [showDataEntry, setShowDataEntry] = useState(false);
   const { data: membershipData } = useMembershipData();
   const { data: financialData } = useFinancialData();
-  const stats = getMembershipStats(membershipData, financialData);
+  const [stats, setStats] = useState<any>(null);
+
+  useEffect(() => {
+    if (membershipData && financialData) {
+      const newStats = getMembershipStats(membershipData, financialData);
+      setStats(newStats);
+    }
+  }, [membershipData, financialData]);
 
   useEffect(() => {
     if (user && !['Company Admin', 'CEO', 'Finance Team'].includes(user.role)) {
